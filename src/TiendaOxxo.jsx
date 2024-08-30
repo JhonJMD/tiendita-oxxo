@@ -1,30 +1,54 @@
 import React, { useState, useEffect } from 'react'
 import ReactDOM from 'react-dom'
-import './RegistroProducto.jsx'
-import './VerProductos.jsx'
+import RegistroProducto from './RegistroProducto'
+import VerProductos from './VerProductos'
+import './styles.css'
 
 function TiendaOxxo() {
     const [vista, setVista] = useState("registro")
+    const [productos, setProductos] = useState([])
 
     useEffect(() => {
         const handleVerProductos = () => setVista("listado")
         const handleVolverARegistro = () => setVista("registro")
+        const handleProductoAgregado = (event) => {
+            setProductos(prevProductos => [...prevProductos, event.detail])
+        }
 
         window.addEventListener('verProductos', handleVerProductos)
         window.addEventListener('volverARegistro', handleVolverARegistro)
+        window.addEventListener('productoAgregado', handleProductoAgregado)
 
         return () => {
             window.removeEventListener('verProductos', handleVerProductos)
             window.removeEventListener('volverARegistro', handleVolverARegistro)
+            window.removeEventListener('productoAgregado', handleProductoAgregado)
         }
     }, [])
 
     return (
-        <div className="container mx-auto p-4 bg-[#ED1C24] min-h-screen text-white">
-            <header className="bg-white text-[#ED1C24] p-4 rounded-lg mb-6">
-                <h1 className="text-4xl font-bold text-center">Tienda Oxxo</h1>
+        <div className="tienda-oxxo">
+            <header className="header">
+                <div className="header-content">
+                    <div className="logo">
+                        <img className="logo-text"  src="./public/Asset+10OXXO.png"/>
+                        <div className="logo-circle"></div>
+                    </div>
+                    <div className="yellow-bar"></div>
+                </div>
             </header>
-            {vista === "registro" ? <registro-producto></registro-producto> : <ver-productos></ver-productos>}
+            <div className='nav'>
+
+            </div>
+            <main className="main-content">
+                {vista === "registro"
+                    ? <RegistroProducto />
+                    : <VerProductos productos={productos} setProductos={setProductos} />
+                }
+            </main>
+            <footer className="footer">
+                © 2024 OXXO. Todos los derechos reservados.
+            </footer>
         </div>
     )
 }
