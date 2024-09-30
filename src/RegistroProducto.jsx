@@ -1,50 +1,101 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react';
 
 function RegistroProducto() {
     const [nuevoProducto, setNuevoProducto] = useState({
-        codigo: "",
         nombre: "",
-        precio: "",
-        stock: ""
-    })
+        codigoBarras: "",
+        precioVenta: "",
+        cantidadStock: "",
+        estado: "",
+        categoria: {
+            idCategoria: ""
+        }
+    });
+
+    const [categorias, setCategorias] = useState([]);
+
+    // Cargar las categorías al iniciar el componente
+    useEffect(() => {
+        fetch('http://localhost:8080/api/categoria')
+            .then(response => response.json())
+            .then(data => {
+                setCategorias(data);
+                console.log(data);
+            })
+            .catch(error => console.error('Error al cargar categorías:', error));
+    }, []);
 
     const handleInputChange = (e) => {
-        const { name, value } = e.target
-        setNuevoProducto(prev => ({
-            ...prev,
-            [name]: value
-        }))
-    }
+        const { name, value } = e.target;
+        if (name === "categoria") {
+            // Al seleccionar una categoría, actualiza el idCategoria
+            setNuevoProducto(prev => ({
+                ...prev,
+                categoria: { idCategoria: parseInt(value) } // Asegúrate de que sea un número
+            }));
+        } else {
+            setNuevoProducto(prev => ({
+                ...prev,
+                [name]: value
+            }));
+        }
+    };
+
 
     const agregarProducto = () => {
-        if (nuevoProducto.codigo && nuevoProducto.nombre && nuevoProducto.precio && nuevoProducto.stock) {
+        const { nombre, codigoBarras, precioVenta, cantidadStock, estado, categoria } = nuevoProducto;
+
+        // Validar que todos los campos estén llenos
+        if (nombre && codigoBarras && precioVenta && cantidadStock && estado && categoria.idCategoria) {
             const productoParaAgregar = {
-                ...nuevoProducto,
-                precio: parseFloat(nuevoProducto.precio),
-                stock: parseInt(nuevoProducto.stock)
-            }
-            const event = new CustomEvent('productoAgregado', { detail: productoParaAgregar })
-            window.dispatchEvent(event)
-            setNuevoProducto({ codigo: "", nombre: "", precio: "", stock: "" })
+                nombre,
+                codigoBarras,
+                precioVenta: parseFloat(precioVenta), // Convertir a float
+                cantidadStock: parseInt(cantidadStock), // Convertir a int
+                estado: parseInt(estado), // Convertir a int
+                categoria: {
+                    idCategoria: categoria.idCategoria // Esto ya es un objeto, no necesitas parsear de nuevo
+                }
+            };
+            console.log('Producto para agregar:', productoParaAgregar);
+
+            // Enviar datos a la API utilizando fetch
+            fetch('http://localhost:8080/api/producto', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(productoParaAgregar)
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Producto añadido con éxito:', data);
+                    // Resetea el formulario
+                    setNuevoProducto({
+                        nombre: "",
+                        codigoBarras: "",
+                        precioVenta: "",
+                        cantidadStock: "",
+                        estado: "",
+                        categoria: {
+                            idCategoria: ""
+                        }
+                    });
+                    const event = new CustomEvent('productoAgregado', { detail: productoParaAgregar });
+                    window.dispatchEvent(event);
+                })
+                .catch(error => {
+                    console.error('Error al añadir el producto:', error);
+                    alert('Ocurrió un error al agregar el producto. Por favor, intente de nuevo.');
+                });
         } else {
-            alert("Por favor, complete todos los campos correctamente.")
+            alert("Por favor, complete todos los campos correctamente.");
         }
-    }
+    };
 
     return (
         <div className="registro-producto">
             <h2>Registro de Productos</h2>
-            <div className="form-group">
-                <label htmlFor="codigo">Código</label>
-                <input
-                    id="codigo"
-                    type="text"
-                    name="codigo"
-                    value={nuevoProducto.codigo}
-                    onChange={handleInputChange}
-                    placeholder="Ej. PRD001"
-                />
-            </div>
             <div className="form-group">
                 <label htmlFor="nombre">Nombre</label>
                 <input
@@ -57,27 +108,65 @@ function RegistroProducto() {
                 />
             </div>
             <div className="form-group">
-                <label htmlFor="precio">Precio (MXN)</label>
+                <label htmlFor="codigoBarras">Código de Barras</label>
                 <input
-                    id="precio"
+                    id="codigoBarras"
+                    type="text"
+                    name="codigoBarras"
+                    value={nuevoProducto.codigoBarras}
+                    onChange={handleInputChange}
+                    placeholder="Ej. PRD001"
+                />
+            </div>
+            <div className="form-group">
+                <label htmlFor="precioVenta">Precio de Venta (COP)</label>
+                <input
+                    id="precioVenta"
                     type="number"
-                    name="precio"
-                    value={nuevoProducto.precio}
+                    name="precioVenta"
+                    value={nuevoProducto.precioVenta}
                     onChange={handleInputChange}
                     placeholder="Ej. 15.50"
                     step="0.01"
                 />
             </div>
             <div className="form-group">
-                <label htmlFor="stock">Stock</label>
+                <label htmlFor="cantidadStock">Cantidad Stock</label>
                 <input
-                    id="stock"
+                    id="cantidadStock"
                     type="number"
-                    name="stock"
-                    value={nuevoProducto.stock}
+                    name="cantidadStock"
+                    value={nuevoProducto.cantidadStock}
                     onChange={handleInputChange}
                     placeholder="Ej. 100"
                 />
+            </div>
+            <div className="form-group">
+                <label htmlFor="estado">Estado</label>
+                <input
+                    id="estado"
+                    type="number"
+                    name="estado"
+                    value={nuevoProducto.estado}
+                    onChange={handleInputChange}
+                    placeholder="Ej. 1"
+                />
+            </div>
+            <div className="form-group">
+                <label htmlFor="categoria">Categoría</label>
+                <select
+                    id="categoria"
+                    name="categoria"
+                    value={nuevoProducto.categoria.idCategoria} // Cambia esto
+                    onChange={handleInputChange}
+                >
+                    <option value="">Seleccione una categoría</option>
+                    {categorias.map((categoria, index) => (
+                        <option key={categoria.idCategoria || index} value={categoria.idCategoria}>
+                            {categoria.descripcion}
+                        </option>
+                    ))}
+                </select>
             </div>
             <div className="button-group">
                 <button onClick={agregarProducto} className="btn btn-primary">
@@ -88,7 +177,10 @@ function RegistroProducto() {
                 </button>
             </div>
         </div>
-    )
+    );
 }
 
-export default RegistroProducto
+export default RegistroProducto;
+
+
+
