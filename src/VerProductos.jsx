@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 
 function VerProductos({ productos, setProductos }) {
-    // Cargar productos desde la API al iniciar el componente
+    // Cargar productos desde la API
     useEffect(() => {
         fetch('http://localhost:8080/api/producto')
             .then(response => {

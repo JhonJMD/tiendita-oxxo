@@ -14,7 +14,7 @@ function RegistroProducto() {
 
     const [categorias, setCategorias] = useState([]);
 
-    // Cargar las categorías al iniciar el componente
+    // Cargar las categorías
     useEffect(() => {
         fetch('http://localhost:8080/api/categoria')
             .then(response => response.json())
@@ -31,7 +31,7 @@ function RegistroProducto() {
             // Al seleccionar una categoría, actualiza el idCategoria
             setNuevoProducto(prev => ({
                 ...prev,
-                categoria: { idCategoria: parseInt(value) } // Asegúrate de que sea un número
+                categoria: { idCategoria: parseInt(value) } 
             }));
         } else {
             setNuevoProducto(prev => ({
@@ -44,17 +44,15 @@ function RegistroProducto() {
 
     const agregarProducto = () => {
         const { nombre, codigoBarras, precioVenta, cantidadStock, estado, categoria } = nuevoProducto;
-
-        // Validar que todos los campos estén llenos
         if (nombre && codigoBarras && precioVenta && cantidadStock && estado && categoria.idCategoria) {
             const productoParaAgregar = {
                 nombre,
                 codigoBarras,
-                precioVenta: parseFloat(precioVenta), // Convertir a float
-                cantidadStock: parseInt(cantidadStock), // Convertir a int
-                estado: parseInt(estado), // Convertir a int
+                precioVenta: parseFloat(precioVenta), 
+                cantidadStock: parseInt(cantidadStock), 
+                estado: parseInt(estado), 
                 categoria: {
-                    idCategoria: categoria.idCategoria // Esto ya es un objeto, no necesitas parsear de nuevo
+                    idCategoria: categoria.idCategoria 
                 }
             };
             console.log('Producto para agregar:', productoParaAgregar);
@@ -83,6 +81,7 @@ function RegistroProducto() {
                     });
                     const event = new CustomEvent('productoAgregado', { detail: productoParaAgregar });
                     window.dispatchEvent(event);
+                    alert('Producto añadido con éxito');
                 })
                 .catch(error => {
                     console.error('Error al añadir el producto:', error);
@@ -157,7 +156,7 @@ function RegistroProducto() {
                 <select
                     id="categoria"
                     name="categoria"
-                    value={nuevoProducto.categoria.idCategoria} // Cambia esto
+                    value={nuevoProducto.categoria.idCategoria} 
                     onChange={handleInputChange}
                 >
                     <option value="">Seleccione una categoría</option>
