@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-function VerProductos({ productos, setProductos }) {
+function VerProductos({ productos, setProductos, onViewChange }) {
     // Cargar productos desde la API
     useEffect(() => {
         fetch('http://localhost:8080/api/producto')
@@ -35,7 +35,7 @@ function VerProductos({ productos, setProductos }) {
         <div className="ver-productos">
             <h2>Listado de Productos</h2>
             <button
-                onClick={() => window.dispatchEvent(new Event('volverARegistro'))}
+                onClick={() => onViewChange('productos')}
                 className="btn btn-primary"
             >
                 Volver al Registro

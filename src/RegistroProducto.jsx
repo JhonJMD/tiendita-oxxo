@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-function RegistroProducto() {
+function RegistroProducto({ onViewChange }) {
     const [nuevoProducto, setNuevoProducto] = useState({
         nombre: "",
         codigoBarras: "",
@@ -14,7 +14,6 @@ function RegistroProducto() {
 
     const [categorias, setCategorias] = useState([]);
 
-    // Cargar las categorías
     useEffect(() => {
         fetch('http://localhost:8080/api/categoria')
             .then(response => response.json())
@@ -28,7 +27,6 @@ function RegistroProducto() {
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         if (name === "categoria") {
-            // Al seleccionar una categoría, actualiza el idCategoria
             setNuevoProducto(prev => ({
                 ...prev,
                 categoria: { idCategoria: parseInt(value) } 
@@ -40,7 +38,6 @@ function RegistroProducto() {
             }));
         }
     };
-
 
     const agregarProducto = () => {
         const { nombre, codigoBarras, precioVenta, cantidadStock, estado, categoria } = nuevoProducto;
@@ -57,7 +54,6 @@ function RegistroProducto() {
             };
             console.log('Producto para agregar:', productoParaAgregar);
 
-            // Enviar datos a la API utilizando fetch
             fetch('http://localhost:8080/api/producto', {
                 method: 'POST',
                 headers: {
@@ -68,7 +64,6 @@ function RegistroProducto() {
                 .then(response => response.json())
                 .then(data => {
                     console.log('Producto añadido con éxito:', data);
-                    // Resetea el formulario
                     setNuevoProducto({
                         nombre: "",
                         codigoBarras: "",
@@ -142,14 +137,16 @@ function RegistroProducto() {
             </div>
             <div className="form-group">
                 <label htmlFor="estado">Estado</label>
-                <input
+                <select
                     id="estado"
-                    type="number"
                     name="estado"
-                    value={nuevoProducto.estado}
+                    value={nuevoProducto.estado} 
                     onChange={handleInputChange}
-                    placeholder="Ej. 1"
-                />
+                >
+                    <option value="">Seleccione un estado</option>
+                    <option value="1">Activo</option>
+                    <option value="0">Desactivado</option>
+                </select>
             </div>
             <div className="form-group">
                 <label htmlFor="categoria">Categoría</label>
@@ -171,7 +168,7 @@ function RegistroProducto() {
                 <button onClick={agregarProducto} className="btn btn-primary">
                     Añadir Producto
                 </button>
-                <button onClick={() => window.dispatchEvent(new Event('verProductos'))} className="btn btn-secondary">
+                <button onClick={() => onViewChange('verProductos')} className="btn btn-secondary">
                     Ver Productos
                 </button>
             </div>
@@ -180,6 +177,3 @@ function RegistroProducto() {
 }
 
 export default RegistroProducto;
-
-
-
