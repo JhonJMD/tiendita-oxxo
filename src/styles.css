@@ -171,6 +171,21 @@ input {
     background-color: var(--oxxo-red);
 }
 
+.btn-edit {
+    background-color: #FFA500;
+    color: white;
+    margin-right: 5px;
+}
+
+.btn-edit:hover {
+    background-color: #FF8C00;
+}
+
+.editar-producto form {
+    max-width: 500px;
+    margin: 0 auto;
+}
+
 table {
     width: 100%;
     border-collapse: collapse;

@@ -31,6 +31,13 @@ function VerProductos({ productos, setProductos, onViewChange }) {
             .catch(error => console.error('Error al eliminar el producto:', error));
     };
 
+    const editarProducto = (idProducto) => {
+        // Aquí implementaremos la lógica para editar el producto
+        console.log(`Editando producto con ID ${idProducto}`);
+        // Por ahora, simplemente cambiamos la vista al formulario de edición
+        onViewChange('editarProducto', idProducto);
+    };
+
     return (
         <div className="ver-productos">
             <h2>Listado de Productos</h2>
@@ -47,6 +54,8 @@ function VerProductos({ productos, setProductos, onViewChange }) {
                         <th>Nombre</th>
                         <th>Precio (COP)</th>
                         <th>Stock</th>
+                        <th>Categoria</th>
+                        <th>Estado</th>
                         <th>Acción</th>
                     </tr>
                 </thead>
@@ -57,12 +66,20 @@ function VerProductos({ productos, setProductos, onViewChange }) {
                             <td>{producto.nombre}</td>
                             <td>${producto.precioVenta.toFixed(2)}</td>
                             <td>{producto.cantidadStock}</td>
+                            <td>{producto.categoria.descripcion}</td>
+                            <td>{producto.estado === 1 ? "Activo" : "Desactivo"}</td>
                             <td>
+                                <button
+                                    onClick={() => editarProducto(producto.idProducto)}
+                                    className="btn btn-edit"
+                                >
+                                    Editar
+                                </button>
                                 <button
                                     onClick={() => eliminarProducto(producto.idProducto)}
                                     className="btn btn-delete"
                                 >
-                                    X
+                                    Eliminar
                                 </button>
                             </td>
                         </tr>

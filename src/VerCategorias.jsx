@@ -10,11 +10,11 @@ function VerCategorias({ categorias, setCategorias, onViewChange }) {
                 }
                 return response.json();
             })
-            .then(data => setProductos(data))
+            .then(data => setCategorias(data))
             .catch(error => console.error('Error al cargar categorias:', error));
     }, [setCategorias]);
 
-    const eliminarProducto = (idCategoria) => {
+    const eliminarCategoria = (idCategoria) => {
         // Eliminar producto de la API
         fetch(`http://localhost:8080/api/categoria/${idCategoria}`, {
             method: 'DELETE',
@@ -31,6 +31,13 @@ function VerCategorias({ categorias, setCategorias, onViewChange }) {
             .catch(error => console.error('Error al eliminar el categoria:', error));
     };
 
+    const editarCategoria = (idCategoria) => {
+        // Aquí implementaremos la lógica para editar el producto
+        console.log(`Editando categoria con ID ${idCategoria}`);
+        // Por ahora, simplemente cambiamos la vista al formulario de edición
+        onViewChange('editarCategoria', idCategoria);
+    };
+
     return (
         <div className="ver-categorias">
             <h2>Listado de Categorias</h2>
@@ -45,19 +52,26 @@ function VerCategorias({ categorias, setCategorias, onViewChange }) {
                     <tr>
                         <th>Nombre</th>
                         <th>Estado</th>
+                        <th>Acción</th>
                     </tr>
                 </thead>
                 <tbody>
                     {categorias.map((categoria) => (
                         <tr key={categoria.idCategoria}>
                             <td>{categoria.descripcion}</td>
-                            <td>{categoria.estado}</td>
+                            <td>{categoria.estado === 1 ? "Activo" : "Desactivo"}</td>
                             <td>
+                            <button
+                                    onClick={() => editarCategoria(categoria.idCategoria)}
+                                    className="btn btn-edit"
+                                >
+                                    Editar
+                                </button>
                                 <button
-                                    onClick={() => eliminarProducto(categoria.idCategoria)}
+                                    onClick={() => eliminarCategoria(categoria.idCategoria)}
                                     className="btn btn-delete"
                                 >
-                                    X
+                                    Eliminar
                                 </button>
                             </td>
                         </tr>
