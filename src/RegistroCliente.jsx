@@ -1,52 +1,64 @@
 import React, { useState } from 'react';
 
-function RegistroCliente() {
-    const [nuevaCategoria, setNuevaCategoria] = useState({
-        descripcion: "",
-        estado: ""
+function RegistroCliente({ onViewChange }) {
+    const [nuevoCliente, setNuevoCliente] = useState({
+        id: "",
+        nombre: "",
+        apellido: "",
+        celular: "",
+        direccion: "",
+        correoElectronico: ""
     });
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        setNuevaCategoria(prev => ({
+        setNuevoCliente(prev => ({
             ...prev,
             [name]: value
         }));
     };
 
 
-    const agregarCategoria = () => {
-        const { descripcion, estado } = nuevaCategoria;
-        if (descripcion && estado) {
-            const categoriaParaAgregar = {
-                descripcion,
-                estado: parseInt(estado)
+    const agregarCliente = () => {
+        const { id, nombre, apellido, celular, direccion, correoElectronico } = nuevoCliente;
+        if (id && nombre && apellido && celular && direccion && correoElectronico) {
+            const clienteParaAgregar = {
+                id,
+                nombre,
+                apellido,
+                celular: parseInt(celular),
+                direccion,
+                correoElectronico
             };
-            console.log('Categoria para agregar:', categoriaParaAgregar);
+            console.log('Cliente para agregar:', clienteParaAgregar);
 
             // Enviar datos a la API utilizando fetch
-            fetch('http://localhost:8080/api/categoria', {
+            fetch('http://localhost:8080/api/cliente', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(categoriaParaAgregar)
+                body: JSON.stringify(clienteParaAgregar)
             })
                 .then(response => response.json())
                 .then(data => {
-                    console.log('Categoria añadido con éxito:', data);
+                    console.log('Cliente añadido con éxito:', data);
                     // Resetea el formulario
-                    setNuevaCategoria({
-                        descripcion: "",
-                        estado: ""
+                    setNuevoCliente({
+                        id: "",
+                        nombre: "",
+                        apellido: "",
+                        celular: "",
+                        direccion: "",
+                        correoElectronico: ""
                     });
-                    const event = new CustomEvent('categoriaAgregado', { detail: categoriaParaAgregar });
+                    const event = new CustomEvent('clienteAgregado', { detail: clienteParaAgregar });
                     window.dispatchEvent(event);
-                    alert('Categoria añadido con éxito');
+                    alert('Cliente añadido con éxito');
                 })
                 .catch(error => {
-                    console.error('Error al añadir el categoria:', error);
-                    alert('Ocurrió un error al agregar el categoria. Por favor, intente de nuevo.');
+                    console.error('Error al añadir el cliente:', error);
+                    alert('Ocurrió un error al agregar el cliente. Por favor, intente de nuevo.');
                 });
         } else {
             alert("Por favor, complete todos los campos correctamente.");
@@ -54,38 +66,80 @@ function RegistroCliente() {
     };
 
     return (
-        <div className="registro-categorias">
-            <h2>Registro de Categorias</h2>
+        <div className="registro-clientes">
+            <h2>Registro de Clientes</h2>
             <div className="form-group">
-                <label htmlFor="descripcion">Descripcion</label>
+                <label htmlFor="id">Cedula</label>
                 <input
-                    id="descripcion"
+                    id="id"
                     type="text"
-                    name="descripcion"
-                    value={nuevaCategoria.descripcion}
+                    name="id"
+                    value={nuevoCliente.id}
                     onChange={handleInputChange}
-                    placeholder="Ej. Refrescos"
+                    placeholder="Ej. 1311887ASDQ11874"
                 />
             </div>
             <div className="form-group">
-                <label htmlFor="estado">Estado</label>
-                <select
-                    id="estado"
-                    name="estado"
-                    value={nuevaCategoria.estado} 
+                <label htmlFor="nombre">Nombre</label>
+                <input
+                    id="nombre"
+                    type="text"
+                    name="nombre"
+                    value={nuevoCliente.nombre}
                     onChange={handleInputChange}
-                >
-                    <option value="">Seleccione un estado</option>
-                    <option value="1">Activo</option>
-                    <option value="0">Desactivado</option>
-                </select>
+                    placeholder="Nombre"
+                />
+            </div>
+            <div className="form-group">
+                <label htmlFor="apellido">Apellido</label>
+                <input
+                    id="apellido"
+                    type="text"
+                    name="apellido"
+                    value={nuevoCliente.apellido}
+                    onChange={handleInputChange}
+                    placeholder="Apellido"
+                />
+            </div>
+            <div className="form-group">
+                <label htmlFor="celular">Celular</label>
+                <input
+                    id="celular"
+                    type="number"
+                    name="celular"
+                    value={nuevoCliente.celular}
+                    onChange={handleInputChange}
+                    placeholder="Ej. 3124198288"
+                />
+            </div>
+            <div className="form-group">
+                <label htmlFor="direccion">Direccion</label>
+                <input
+                    id="direccion"
+                    type="text"
+                    name="direccion"
+                    value={nuevoCliente.direccion}
+                    onChange={handleInputChange}
+                    placeholder="Ej. Cra 2W #16G"
+                />
+            </div>
+            <div className="form-group">
+                <label htmlFor="correoElectronico">Correo Electronico</label>
+                <input
+                    id="correoElectronico"
+                    type="text"
+                    name="correoElectronico"
+                    value={nuevoCliente.correoElectronico}
+                    onChange={handleInputChange}
+                    placeholder="Ej. usuario@gmail.com"
+                />
             </div>
             <div className="button-group">
-                <button onClick={agregarCategoria} className="btn btn-primary">
-                    Añadir Categoria
+                <button onClick={agregarCliente} className="btn btn-primary">
+                    Añadir Cliente
                 </button>
-                <button onClick={() => window.dispatchEvent(new Event('verProductos'))} className="btn btn-secondary">
-                    Ver Productos
+                <button onClick={() => onViewChange('verClientes')} className="btn btn-secondary">
+                    Ver Clientes
                 </button>
             </div>
         </div>

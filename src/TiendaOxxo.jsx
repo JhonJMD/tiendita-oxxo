@@ -7,6 +7,8 @@ import RegistroCategoria from './RegistroCategoria'
 import VerCategorias from './VerCategorias'
 import EditarCategoria from './EditarCategoria'
 import RegistroCliente from './RegistroCliente'
+import VerClientes from './VerClientes'
+import EditarCliente from './EditarCliente'
 import RegistroCompra from './RegistroCompra'
 import './styles.css'
 
@@ -14,8 +16,10 @@ function TiendaOxxo() {
     const [vista, setVista] = useState("inicio")
     const [productos, setProductos] = useState([])
     const [categorias, setCategorias] = useState([])
+    const [clientes, setClientes] = useState([])
     const [productoEditando, setProductoEditando] = useState(null)
     const [categoriaEditando, setCategoriaEditando] = useState(null)
+    const [clienteEditando, setClienteEditando] = useState(null)
 
     useEffect(() => {
         const handleProductoAgregado = (event) => {
@@ -26,12 +30,18 @@ function TiendaOxxo() {
             setCategorias(prevCategorias => [...prevCategorias, event.detail])
         }
 
+        const handleClienteAgregado = (event) => {
+            setClientes(prevClientes => [...prevClientes, event.detail])
+        }
+
         window.addEventListener('productoAgregado', handleProductoAgregado)
         window.addEventListener('categoriaAgregado', handleCategoriaAgregado)
+        window.addEventListener('clienteAgregado', handleClienteAgregado)
 
         return () => {
             window.removeEventListener('productoAgregado', handleProductoAgregado)
             window.removeEventListener('categoriaAgregado', handleCategoriaAgregado)
+            window.removeEventListener('clientegregado', handleClienteAgregado)
         }
     }, [])
 
@@ -41,6 +51,8 @@ function TiendaOxxo() {
             setProductoEditando(productos.find(p => p.idProducto === id))
         } else if (newView === 'editarCategoria' && id) {
             setCategoriaEditando(categorias.find(c => c.idCategoria === id))
+        } else if (newView === 'editarCliente' && id){
+            setClienteEditando(clientes.find(cli => cli.id === id))
         }
     }
 
@@ -67,8 +79,16 @@ function TiendaOxxo() {
                     onViewChange={handleViewChange} 
                     setCategorias={setCategorias}
                 />
-            case "registroCliente":
-                return <RegistroCliente />
+            case "clientes":
+                return <RegistroCliente onViewChange={handleViewChange}/>
+            case "verClientes":
+                return <VerClientes clientes={clientes} setClientes={setClientes} onViewChange={handleViewChange} />
+            case "editarCliente":
+                return <EditarCliente
+                    cliente={clienteEditando} 
+                    onViewChange={handleViewChange} 
+                    setClientes={setClientes}
+                />
             case "registroCompra":
                 return <RegistroCompra />
             default:
@@ -100,8 +120,8 @@ function TiendaOxxo() {
                     Categorías
                 </button>
                 <button 
-                    className={`nav-btn ${vista === "registroCliente" ? 'active' : ''}`}
-                    onClick={() => setVista("registroCliente")}
+                    className={`nav-btn ${vista === "clientes" || vista === "verClientes" || vista === "editarCliente" ? 'active' : ''}`}
+                    onClick={() => setVista("clientes")}
                 >
                     Clientes
                 </button>
