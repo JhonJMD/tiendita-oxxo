@@ -1,5 +1,7 @@
 # Tiendita OXXO - Sistema de Gestión 🏪
 
+![](https://raw.githubusercontent.com/JhonJMD/tiendita-oxxo/refs/heads/main/public/assets/images/Asset%2B10OXXO.png)
+
 ![React Version](https://img.shields.io/badge/React-18.3.1-blue)
 ![Vite Version](https://img.shields.io/badge/Vite-6.3.5-brightgreen)
 ![License](https://img.shields.io/badge/License-MIT-yellow)
@@ -20,11 +22,11 @@
 
 ## 📸 Capturas de pantalla
 
-![](/home/camper/Imágenes/Capturas de pantalla/Captura desde 2025-05-13 09-58-40.png)
+![](https://raw.githubusercontent.com/JhonJMD/tiendita-oxxo/refs/heads/main/public/assets/images/Captura%20desde%202025-05-13%2009-58-40.png)
 
 ## 🎬 Demo
 
-
+![https://raw.githubusercontent.com/JhonJMD/tiendita-oxxo/refs/heads/main/public/assets/images/Grabación-de-pantalla-desde-13-05-25-10_25_19.gif]()
 
 ## 🛠️ Tecnologías utilizadas
 
