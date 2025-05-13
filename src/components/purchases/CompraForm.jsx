@@ -19,6 +19,7 @@ function CompraForm({ onSuccess }) {
             productoId: '',
             cantidad: '',
         },
+        medioPago: '', // Nuevo campo añadido
     });
 
     const [clientes, setClientes] = useState([]);
@@ -190,6 +191,10 @@ function CompraForm({ onSuccess }) {
             newErrors.productos = 'Debe agregar al menos un producto';
         }
 
+        if (!formData.medioPago) {
+            newErrors.medioPago = 'Debe seleccionar un medio de pago';
+        }
+
         setErrors(prev => ({
             ...prev,
             ...newErrors
@@ -220,9 +225,10 @@ function CompraForm({ onSuccess }) {
                     cantidad: p.cantidad,
                     precioUnitario: p.precio,
                 })),
-                fechaCompra: new Date().toISOString(),
+                fecha: new Date().toISOString(), // Cambiado de fechaCompra a fecha
                 total: calcularTotal(),
-                estado: 1,
+                estado: "P", // Cambiado de 1 a "P" (Pendiente)
+                medioPago: formData.medioPago, // Nuevo campo añadido
             };
 
             const result = await createCompra(compraData);
@@ -237,6 +243,7 @@ function CompraForm({ onSuccess }) {
                     productoId: '',
                     cantidad: '',
                 },
+                medioPago: '',
             });
 
             if (onSuccess) {
@@ -284,6 +291,23 @@ function CompraForm({ onSuccess }) {
                         ))}
                     </select>
                     {errors.clienteId && <div className="error-message">{errors.clienteId}</div>}
+                </div>
+
+                <div className="form-group">
+                    <label htmlFor="medioPago">Medio de Pago</label>
+                    <select
+                        id="medioPago"
+                        name="medioPago"
+                        value={formData.medioPago}
+                        onChange={handleInputChange}
+                        className={errors.medioPago ? 'input-error' : ''}
+                    >
+                        <option value="">Seleccione un medio de pago</option>
+                        <option value="Efectivo">Efectivo</option>
+                        <option value="Tarjeta">Tarjeta de Crédito/Débito</option>
+                        <option value="Transferencia">Transferencia</option>
+                    </select>
+                    {errors.medioPago && <div className="error-message">{errors.medioPago}</div>}
                 </div>
 
                 <div className="agregar-producto">

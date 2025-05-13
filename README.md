@@ -20,11 +20,11 @@
 
 ## 📸 Capturas de pantalla
 
-*Aquí se pueden agregar capturas de la aplicación en funcionamiento*
+![](/home/camper/Imágenes/Capturas de pantalla/Captura desde 2025-05-13 09-58-40.png)
 
 ## 🎬 Demo
 
-*Aquí se pueden agregar enlaces a videos de demostración del sistema*
+
 
 ## 🛠️ Tecnologías utilizadas
 

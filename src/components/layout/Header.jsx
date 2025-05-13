@@ -8,7 +8,7 @@ function Header({ setVista }) {
                 <div className="logo">
                     <img
                         className="logo-text"
-                        src="./public/assets/images/Asset+10OXXO.png"
+                        src="/assets/images/Asset+10OXXO.png"
                         alt="OXXO Logo"
                         onClick={() => setVista("inicio")}
                         style={{ cursor: 'pointer' }}
