@@ -26,7 +26,8 @@
 
 ## 🎬 Demo
 
-![https://raw.githubusercontent.com/JhonJMD/tiendita-oxxo/refs/heads/main/public/assets/images/Grabación-de-pantalla-desde-13-05-25-10_25_19.gif]()
+![Demo](https://raw.githubusercontent.com/JhonJMD/tiendita-oxxo/main/public/assets/images/Grabaci%C3%B3n-de-pantalla-desde-13-05-25-10_25_19.gif)
+
 
 ## 🛠️ Tecnologías utilizadas
 
